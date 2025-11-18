@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('allowed_members', function (Blueprint $table) {
             $table->id();
-            $table->string('email')->unique();
+            $table->string('email');
             $table->foreignId('organization_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });

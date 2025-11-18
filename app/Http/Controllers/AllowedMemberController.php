@@ -15,6 +15,9 @@ class AllowedMemberController extends Controller
         $user = Auth::user();
         $organization = $user->organizations()->where('organization_id', $id)->first();
 
+        if($user->role == 'admin'){
+            return true;
+        }
         if (!$organization) {
             abort(404, 'Organization not found');
         }
@@ -44,29 +47,32 @@ class AllowedMemberController extends Controller
 
         return redirect('/')->with('success', 'Berhasil bergabung ke organisasi!');
     }
+    
     public function show($id){
         $this->getAuthorizedOrganization($id);
         $organization = Organization::findOrFail($id);
         return view('organization.store-email', compact('organization'));
     }
-    public function store(Request $request, $id){
-        $check = $this->getAuthorizedOrganization($id);
-        $request->validate([
-            'csv_file' => 'required|mimes:csv,txt',
+
+    public function store(Request $request){
+        $validated = $request->validate([
+            'email' => ['required', 'email'],
+            'organization_id' => ['required', 'integer', 'exists:organizations,id'],
         ]);
+        $id = $validated['organization_id'];
+        $check = $this->getAuthorizedOrganization($id);
+        $exists = AllowedMember::where('email', $validated['email'])
+            ->where('organization_id', $validated['organization_id'])
+            ->exists();
 
-        $file = $request->file('csv_file');
-        $handle = fopen($file->getRealPath(), 'r');
-
-        while (($row = fgetcsv($handle, 1000, ',')) !== false) {
-            $email = trim($row[0]);
-            AllowedMember::firstOrCreate([
-                'email' => $email,
-                'organization_id' =>$id
-            ]);
+        if ($exists) {
+            return back()->with('error', 'Email ini sudah diizinkan untuk organisasi tersebut.');
         }
 
-        fclose($handle);
+        AllowedMember::create([
+            'email' => $validated['email'],
+            'organization_id' => $validated['organization_id'],
+        ]);
 
         return redirect()->back()->with('success', 'Email berhasil diimport!');
     }

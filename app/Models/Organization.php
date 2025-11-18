@@ -25,6 +25,15 @@ class Organization extends Model
 
     public function getRoleUser(){
         $user_id =  Auth::user()->id;
+
+        if (!$user_id) {
+            return null;
+        }
+        $userOrganization = $this->users()->where('user_id', $user_id)->first();
+        if (!$userOrganization) {
+            return 'guest';
+        }
+
         $role = $this->users()->where('user_id', $user_id)->first()->pivot->role->name;
         return $role;
     }

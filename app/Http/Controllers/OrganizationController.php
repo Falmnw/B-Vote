@@ -3,26 +3,50 @@
 namespace App\Http\Controllers;
 
 use App\Models\AllowedMember;
+use App\Models\buat_sesi;
 use App\Models\Candidate;
 use App\Models\Organization;
 use App\Models\OrganizationUser;
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 class OrganizationController extends Controller
 {
-    private function getAuthorizedOrganization($id, $with = [])
+    private function getAdminAuthorizedOrganization($id, $with = [])
     {
         /** @var \App\Models\User $user */
         $user = Auth::user();
-        $exists = $user->organizations()->where('organization_id', $id)->exists();
-        if (!$exists) {
-            abort(403, 'Unauthorized access to this organization');
+        $organization = $user->organizations()->where('organization_id', $id)->first();
+        if (!$organization) {
+            abort(403, 'Unauthorized access');
+        }
+        if ($organization->pivot->role_id) {
+            $roleName = $organization->pivot->role->name;
+
+            if ($roleName !== 'Admin') {
+                abort(403, 'Unauthorized access');
+            }
+        } else {
+            abort(403, 'Unauthorized access');
+        }
+        return true;
+    }
+
+    private function getAuthorizedOrganization($id, $with = []){
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+        $organization = $user->organizations()->where('organization_id', $id)->first();
+        if (!$organization) {
+            abort(403, 'Unauthorized access');
         }
         return Organization::with($with)->findOrFail($id);
     }
 
     public function store(Request $request){
+        $request->validate([
+            'organization_id' => 'required|integer|exists:organizations,id',
+        ]);
         /** @var \App\Models\User $user */
         $user = Auth::user();
         $isAllowed = AllowedMember::where('email', $user->email)->where('organization_id', $request->organization_id)->exists();
@@ -41,8 +65,11 @@ class OrganizationController extends Controller
 
     public function show($id)
     {
-        $organization = $this->getAuthorizedOrganization($id);
-        return view('organization.show', compact('organization'));
+        $sesi = buat_sesi::where('organization_id', $id)->first();
+        $organization = Organization::with('candidates')->findOrFail($id);
+        $user = Auth::user();
+        $winner = $organization->candidates()->orderByDesc('total')->first();
+        return view('organization.show', compact('sesi', 'organization','user', 'winner'));
     }
 
     public function candidate($id)
@@ -62,7 +89,8 @@ class OrganizationController extends Controller
         /** @var \App\Models\User $user */
         $user = Auth::user();
 
-        $exists = $user->organizations()->where('organization_id', $id)->where('role_id', 2)->exists();
+        $adminRoleId = Role::where('name', 'Admin')->value('id');
+        $exists = $user->organizations()->where('organization_id', $id)->where('role_id', $adminRoleId)->exists();
         if (!$exists) {
             abort(403, 'Unauthorized access');
         }
@@ -74,34 +102,31 @@ class OrganizationController extends Controller
         /** @var \App\Models\User $user */
         $user = Auth::user();
         $request->validate([
-            'role_id' => 'required|exists:roles,id',
+            'user_id' => 'required|integer|exists:users,id',
+            'organization_id' => 'required|integer|exists:organizations,id',
+            'role_id' => 'required|integer|exists:roles,id',
         ]);
+        $this->getAdminAuthorizedOrganization($request->organization_id);
+        $organization = $this->getAuthorizedOrganization($request->organization_id);
+        $adminRoleId = Role::where('name', 'Admin')->value('id');
+        $candidateRoleId = Role::where('name', 'Candidate')->value('id');
 
-        $organization = $user
-            ->organizations()
-            ->where('organizations.id', $id)
-            ->first();
-
-        if (! $organization || $organization->pivot->role_id > 2) {
-            abort(403, 'Unauthorized access');
-        }
         $user_id = $request->input('user_id');
         $organization_id = $request->input('organization_id');
         $role_id = $request->input('role_id');
 
+        if ($user->id == $user_id) {
+            abort(403, 'You cannot change your own role.');
+        }
+
         OrganizationUser::where('user_id', $user_id)
                         ->where('organization_id', $organization_id)
                         ->update(['role_id' => $role_id]);
-        if ($role_id == 6) { 
-            Candidate::firstOrCreate(
-                [
-                    'user_id' => $user_id,
-                    'organization_id' => $organization_id,
-                ],
-                [
-                    'total' => 0,
-                ]
-            );
+        if ($request->role_id == $candidateRoleId) {
+            Candidate::firstOrCreate([
+                'user_id' => $request->user_id,
+                'organization_id' => $organization->id,
+            ], ['total' => 0]);
         }
 
         return view('organization.give-role', compact('organization'));

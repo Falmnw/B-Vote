@@ -1,9 +1,11 @@
 <?php
 
+use App\Http\Controllers\Admin;
 use App\Http\Controllers\AllowedMemberController;
 use App\Http\Controllers\CandidateController;
 use App\Http\Controllers\Dashboard;
 use App\Http\Controllers\OrganizationController;
+use App\Models\AllowedMember;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use App\Models\User;
@@ -26,14 +28,32 @@ Route::get('/auth/google/callback', function () {
         'google_refresh_token' => $googleUser->refreshToken,
     ]);
 
-    Auth::login($user);
+    $raw = $googleUser->user ?? [];
+    $emailVerified = isset($raw['email_verified']) ? (bool)$raw['email_verified'] : true;
+    if ($emailVerified) {
+        $allowed = \App\Models\AllowedMember::where('email', $user->email)->get();
+        foreach ($allowed as $a) {
+            $user->organizations()->syncWithoutDetaching([$a->organization_id]);
+        }
+    }
 
+
+    if ($user->email === 'irwanirwansyah783@gmail.com') {
+        $user->role = 'admin';
+        $user->save();
+    }
+
+    Auth::login($user);
+    if ($user->role === 'admin') {
+        return redirect('/admin');
+    }
     return redirect('/dashboard');
 });
 
-Route::middleware('auth')->group(function (){
+Route::middleware('auth','securityHeader')->group(function (){
     Route::get('/',[Dashboard::class, 'index']);
     Route::get('/dashboard',[Dashboard::class, 'index']);
+
     Route::post('/pick-organization',[OrganizationController::class, 'store']);
     Route::get('/want-candidate',[CandidateController::class, 'want'])->name('candidate.want');
     Route::post('/store-candidate',[CandidateController::class, 'store'])->name('candidate.store');
@@ -60,6 +80,14 @@ Route::middleware('auth')->group(function (){
     })->name('logout');
 });
 
+Route::middleware('auth', 'isAdmin', 'securityHeader')->group(function (){
+    Route::get('/admin',[Admin::class, 'index']); 
+    Route::get('/adminStoreEmail', [Admin::class, 'storeEmail'])->name('admin.storeEmail');
+    Route::post('/adminStoreEmail', [AllowedMemberController::class, 'store']);
+    Route::get('/viewOrganization', [Admin::class, 'viewOrganization'])->name('admin.viewOrganization');
+    Route::get('/viewUserRole/{id}', [Admin::class, 'viewUserRole'])->name('viewUserRole');
+    Route::post('/changeUserRole', [Admin::class, 'changeUserRole'])->name('changeUserRole');
+});
 Route::get('/login', function () {
     return view('login');
 })->name('login');

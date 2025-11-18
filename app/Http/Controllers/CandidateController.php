@@ -9,11 +9,19 @@ use App\Models\OrganizationUser;
 use App\Models\Vote;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-
+use App\Services\OrganizationService;
 class CandidateController extends Controller
 {
-    private function getAuthorizedOrganization($id)
-    {
+    private function checkUser($id){
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+        $roleName = OrganizationUser::where('organization_id', $id)->where('user_id', $user->id)->first();
+        if (!$roleName) {
+            abort(403, 'Unauthorized access');
+        } 
+        return true;
+    }
+    private function checkAdmin($id){
         /** @var \App\Models\User $user */
         $user = Auth::user();
         $roleName = OrganizationUser::where('organization_id', $id)->where('user_id', $user->id)->first()->getRoleUser();
@@ -23,12 +31,12 @@ class CandidateController extends Controller
         return true;
     }
     public function createSession($id){
-        $this->getAuthorizedOrganization($id);
+        // $this->checkAdmin($id);
         $organization = Organization::findOrFail($id);
         return view('organization.create-session', compact('organization'));
     }
-    public function storeSession(Request $request,$id){
-        $this->getAuthorizedOrganization($id);
+    public function storeSession(Request $request ,$id){
+        // $this->checkAdmin($id);
         $request->validate([
             'title' => 'required|string',
             'start_time' => 'required|date',
@@ -66,7 +74,7 @@ class CandidateController extends Controller
 
     }
     public function deleteSession($id){
-        $this->getAuthorizedOrganization($id);
+        // $this->checkAdmin($id);
         $sesi =buat_sesi::where('organization_id', $id)->first();
         $candidate =Candidate::where('organization_id', $id);
         $vote =Vote::where('organization_id', $id);
@@ -83,13 +91,13 @@ class CandidateController extends Controller
         return view('organization.show-session', compact('sesi', 'organization','user', 'winner'));
     }
     public function show($id){
-        $this->getAuthorizedOrganization($id);
+        $this->checkAdmin($id);
         $organization = Organization::findOrFail($id);
         return view('organization.store-candidate', compact('organization'));
     }
 
     public function storeCandidate(Request $request, $id){
-        $this->getAuthorizedOrganization($id);
+        $this->checkAdmin($id);
         $organization = Organization::findOrFail($id);
         $validated = $request->validate([
             'user_id' => 'required|array|min:1',
@@ -116,7 +124,7 @@ class CandidateController extends Controller
         $user_id = Auth::id();
         $organization_id = $request->input('organization_id');
         $candidate_id = $request->input('candidate_id');
-
+        $this->checkUser($organization_id);
         $exists = Vote::where('user_id', $user_id)->where('organization_id', $organization_id)->exists();
         if ($exists) {
             return redirect()->route('organization.show', ['id' => $organization_id])->with('error', 'Anda sudah vote');

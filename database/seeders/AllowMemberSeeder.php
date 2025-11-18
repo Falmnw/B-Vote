@@ -2,21 +2,21 @@
 
 namespace Database\Seeders;
 
-use App\Models\Role;
+use App\Models\AllowedMember;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class RoleSeeder extends Seeder
+class AllowMemberSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        $role = ['Admin', 'Member', 'Aktivis', 'Pengurus', 'Candidate'];
-        foreach($role as $r){
-            Role::create([
-                'name' => $r,
+        for($i = 1;$i < 41;$i++){
+            AllowedMember::create([
+                'email' => 'irwanirwansyah783@gmail.com',
+                'organization_id' => $i,
             ]);
         }
     }
