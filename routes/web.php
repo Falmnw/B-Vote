@@ -89,7 +89,7 @@ Route::middleware('auth', 'isAdmin', 'securityHeader')->group(function (){
     Route::post('/changeUserRole', [Admin::class, 'changeUserRole'])->name('changeUserRole');
 });
 Route::get('/login', function () {
-    return view('login');
+    return view('auth.login');
 })->name('login');
 
 

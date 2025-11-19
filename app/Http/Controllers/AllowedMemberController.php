@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\AllowedMember;
 use App\Models\Organization;
+use App\Models\User;
 
 class AllowedMemberController extends Controller
 {
@@ -73,7 +74,13 @@ class AllowedMemberController extends Controller
             'email' => $validated['email'],
             'organization_id' => $validated['organization_id'],
         ]);
-
+        $user = User::where('email', $validated['email'])->first();;
+        if($user){
+            $allowed = \App\Models\AllowedMember::where('email', $user->email)->get();
+            foreach ($allowed as $a) {
+                $user->organizations()->syncWithoutDetaching([$a->organization_id]);
+            }
+        }
         return redirect()->back()->with('success', 'Email berhasil diimport!');
     }
 }
