@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Group</title>
+    <link rel="stylesheet" href="YourGroup.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <nav>
+            <!-- <img src="/resource/Logo B-Vote.png" alt="" id="bvote_logo"> -->
+
+            <!-- Tambahkan wrapper tengah -->
+            <div class="nav-center">
+                <a href="home.html">Home</a>
+                <a href="YourGroup.html">Organization</a>
+                <a href="faq.html">FaQs</a>
+            </div>
+
+            <a href="login.html" class="login">Login</a>
+            <a href="signup.html" class="signup">Sign Up</a>
+        </nav>
+    </header>
+
+    <div class="banner">
+        <h1 class="vote-now">Vote Now</h1>
+        <p class="slogan">Tercatat, Terjaga, Terjamin</p>
+    </div>
+
+    <div class="group-header">
+        <h2>Your Organization</h2>
+    </div>
+
+    <select id="filter-rumpun">
+        <option value="all">All</option>
+        <option value="HMJ">Himpunan Mahasiswa Jurusan</option>
+        <option value="Penalaran">Penalaran</option>
+        <option value="Kesenian&MediaInformasi">Kesenian & Media Informasi</option>
+        <option value="Kerohanian&mMasyarakat">Kerohanian & Masyarakat</option>
+        <option value="Olahraga&Beladiri">Olahraga & Beladiri</option>
+    </select>
+
+    <div id="groups-container"></div>
+
+    <script src="YourGroup.js"></script>
+
+    <div class="bottom-bar">
+        <a href = "/OtherGroup/OtherGroup.html" button class="bottom-button">
+            Check Other Groups!
+        </a>
+    </div>
+
+</body>
+</html>
