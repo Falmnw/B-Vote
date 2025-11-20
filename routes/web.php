@@ -53,6 +53,7 @@ Route::get('/auth/google/callback', function () {
 Route::middleware('auth','securityHeader')->group(function (){
     Route::get('/',[Dashboard::class, 'index']);
     Route::get('/dashboard',[Dashboard::class, 'index']);
+    Route::get('/other-organization',[Dashboard::class, 'other'])->name('otherOrganization');
 
     Route::post('/pick-organization',[OrganizationController::class, 'store']);
     Route::get('/want-candidate',[CandidateController::class, 'want'])->name('candidate.want');

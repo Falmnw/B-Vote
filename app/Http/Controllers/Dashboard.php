@@ -17,4 +17,11 @@ class Dashboard extends Controller
         return view('dashboard', compact('user', 'organizations', 'orguser'));
 
     }
+    public function other(){
+        $user = Auth::user();
+        $organizations = Organization::all();
+        $orguser = OrganizationUser::all();
+        return view('other-organization', compact('user', 'organizations', 'orguser'));
+
+    }
 }

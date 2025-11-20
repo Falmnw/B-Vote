@@ -6,6 +6,7 @@
     <title>@yield('title', 'My App')</title>
     <!-- <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}"> -->
     <link rel="stylesheet" href="{{ asset('assets/css/adminS.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/candidate.css') }}">
     <link rel="icon" type="image/png" href="{{ asset('assets/images/logo-apk-simple.png') }}">
 
     <!-- Fonts & Bootstrap -->
