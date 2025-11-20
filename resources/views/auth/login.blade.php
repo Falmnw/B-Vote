@@ -1,14 +1,15 @@
-@extends('layout.master')
+@extends('layout.auth')
 @section('title', 'Login')
 
 @section('content')
+<div class="awk">
     <div class="login-container">
         <div class="login-card">
             <div class="card-accent"></div>
 
             <div class="login-header">
                 <div class="logo">
-                    <img src="{{ asset('assets/images/logo-apk-simple.png') }}" alt="logo apk simple" class="logo-apk">
+                    <img src="{{ asset('assets/images/logo.png') }}" alt="logo apk simple" class="logo-apk">
                 </div>
                 <h1>Login</h1>
                 <p>Sign in to your account</p>
@@ -40,7 +41,8 @@
             </div>
         </div>
     </div>
+</div>
 
 
-    <script src="{{ asset('assets/js/script-login.js') }}"></script>
+<script src="{{ asset('assets/js/script-login.js') }}"></script>
 @endsection

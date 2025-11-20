@@ -13,23 +13,39 @@ class Admin extends Controller
 {
     public function index(){
         $user = Auth::user();
-        return view('admin.dashboard', compact('user'));
+        $organizations = Organization::all();
+        $roles = Role::all();
+        return view('admin.dashboard', compact('user', 'organizations', 'roles'));
     }
     public function storeEmail(){
         $user = Auth::user();
         $organizations = Organization::all();
-        return view('admin.storeEmail', compact('user', 'organizations'));
+        $roles = Role::all();
+        return view('admin.storeEmail', compact('user', 'organizations', 'roles'));
     }
     public function viewOrganization(){
         $organizations = Organization::all();
         return view('admin.viewOrganization', compact('organizations'));
     }
-    public function viewUserRole($id){
-        $organization = Organization::findOrFail($id);
-        $roles = Role::all();
+    public function viewUserRole(Request $request, $id)
+    {
+        $organization = Organization::with('users')->findOrFail($id);
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json([
+                'users' => $organization->users->map(function ($user) {
+                    return [
+                        'id' => $user->id,
+                        'email' => $user->email,
+                    ];
+                })
+            ]);
+            
+        }
+        $roles = Role::all(); // Asumsi Model Role ada
+        
         return view('admin.viewUserRole', compact('organization', 'roles'));
-
     }
+
     public function changeUserRole(Request $request){
         $validated = $request->validate([
             'user_id' => ['required', 'integer', 'exists:users,id'],
