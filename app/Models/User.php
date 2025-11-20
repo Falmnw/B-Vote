@@ -18,10 +18,7 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $fillable = [
-        'nim',
         'name',
-        'daerah',
-        'organisasi',
         'email',
         'password',
         'google_id',
@@ -56,7 +53,7 @@ class User extends Authenticatable
     public function organizations()
     {
         return $this->belongsToMany(Organization::class, 'organization_users')
-                    ->using(OrganizationUser::class)
+                    ->using(OrganizationUser::class) 
                     ->withPivot('role_id')
                     ->withTimestamps();
     }
@@ -65,5 +62,8 @@ class User extends Authenticatable
     {
         return $this->hasMany(Vote::class);
     }
-
+    public function candidates()
+    {
+        return $this->hasMany(Candidate::class);
+    }
 }

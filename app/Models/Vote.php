@@ -6,10 +6,15 @@ use Illuminate\Database\Eloquent\Model;
 
 class Vote extends Model
 {
-    protected $fillable = ['user_id', 'organization_id'];
-    public function user()
+    protected $fillable = [
+        'poll_id',
+        'organization_id',
+        'user_id',
+    ];
+
+    public function session()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(buat_sesi::class);
     }
 
     public function candidate()
@@ -17,8 +22,8 @@ class Vote extends Model
         return $this->belongsTo(Candidate::class);
     }
 
-    public function organization()
+    public function user()
     {
-        return $this->belongsTo(Organization::class);
+        return $this->belongsTo(User::class);
     }
 }

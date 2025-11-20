@@ -6,11 +6,26 @@ use Illuminate\Database\Eloquent\Model;
 
 class buat_sesi extends Model
 {
-    protected $table = 'buat_sesi';
-    protected $fillable = ['organization_id','title', 'start_time', 'end_time'];
-    protected $casts = [
-        'start_time' => 'datetime',
-        'end_time' => 'datetime',
+    protected $fillable = [
+        'organization_id',
+        'title',
+        'start_time',
+        'end_time'
     ];
+
+    public function organization()
+    {
+        return $this->belongsTo(Organization::class);
+    }
+
+    public function candidates()
+    {
+        return $this->hasMany(Candidate::class);
+    }
+
+    public function votes()
+    {
+        return $this->hasMany(Vote::class);
+    }
 
 }

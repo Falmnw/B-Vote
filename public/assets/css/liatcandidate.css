@@ -1,0 +1,146 @@
+
+
+/* Banner Header */
+.headers {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #014769;
+    height: 100px;
+    padding: 0 40px;
+    margin-top: 101px;
+}
+
+.foto_candidate {
+    height: 150px;
+    width: 150px;
+    margin-right: 40px;
+}
+
+.nama_candidate {
+    font-size: 35px;
+    font-weight: bold;
+    background: linear-gradient(90deg, #F28C28, #F8D55A);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    padding-right: 55px;
+}
+
+.jabatan {
+    font-style: italic;
+    text-align: center;
+    font-size: 18px;
+    color: white;
+    margin-top: 30px;
+	margin-left: 55px;
+}
+
+/* Logo Organisasi */
+.logo_organisasi {
+    background-color: white;
+    border-radius: 50%;
+    height: 70px;
+    padding: 5px;
+
+}
+
+/* Card Section */
+.card {
+    background:#0474b8;
+    border-radius: 22px;
+    padding: 20px 32px;
+    margin-bottom: 25px;
+    width: 50%;
+    margin-left: 25%;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.18);
+    border: 3px solid #19a4ff;
+
+}
+
+
+#hehe {
+    color: #ffd28a;
+}
+
+.card-header {
+    display: flex;
+    align-items: center;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.icong {
+    width: 30px;
+    height: 30px;
+    border-radius: 6px;
+    margin-right: 10px;
+}
+
+.card-title {
+    background-color: #F8D55A;
+    border-radius: 25px;
+    padding: 4px 30px;
+    font-style: italic;
+}
+
+ul {
+    margin: 0;
+    padding-left: 18px;
+    line-height: 1.15;
+    color: #ffd28a;
+}
+
+/* 2 Column Layout */
+.row {
+    display: flex;
+}
+
+.col {
+    flex: 1;
+    margin-left: 50px;
+    padding: 10px 20px;
+}
+
+/* Footer */
+footer.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #014769; /* warna biru tua seperti contoh */
+  color: white;
+  padding: 10px 40px;
+  font-size: 14px;
+  font-family: "Poppins", sans-serif;
+  margin-top: 350px;
+
+}
+
+
+/* kiri */
+.footer-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+/* garis pemisah tengah */
+.footer-divider {
+  flex: 1;
+  height: 1px;
+  background-color: rgba(255, 255, 255, 0.4);
+  margin: 0 20px;
+}
+
+/* kanan */
+.footer-right {
+  display: flex;
+  gap: 20px;
+}
+
+.footer-right a {
+  color: white;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}

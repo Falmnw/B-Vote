@@ -1,14 +1,11 @@
 <?php
 
+use App\Http\Controllers\Admin;
 use App\Http\Controllers\AllowedMemberController;
 use App\Http\Controllers\CandidateController;
 use App\Http\Controllers\Dashboard;
 use App\Http\Controllers\OrganizationController;
-use App\Http\Controllers\AuthController;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Password;
-use Illuminate\Support\Str;
-use Illuminate\Auth\Events\PasswordReset;
+use App\Models\AllowedMember;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use App\Models\User;
@@ -31,14 +28,32 @@ Route::get('/auth/google/callback', function () {
         'google_refresh_token' => $googleUser->refreshToken,
     ]);
 
-    Auth::login($user);
+    $raw = $googleUser->user ?? [];
+    $emailVerified = isset($raw['email_verified']) ? (bool)$raw['email_verified'] : true;
+    if ($emailVerified) {
+        $allowed = \App\Models\AllowedMember::where('email', $user->email)->get();
+        foreach ($allowed as $a) {
+            $user->organizations()->syncWithoutDetaching([$a->organization_id]);
+        }
+    }
 
+
+    if ($user->email === 'willybinusian@gmail.com') {
+        $user->role = 'admin';
+        $user->save();
+    }
+
+    Auth::login($user);
+    if ($user->role === 'admin') {
+        return redirect('/admin');
+    }
     return redirect('/dashboard');
 });
 
-Route::middleware('auth')->group(function (){
+Route::middleware('auth','securityHeader')->group(function (){
     Route::get('/',[Dashboard::class, 'index']);
     Route::get('/dashboard',[Dashboard::class, 'index']);
+
     Route::post('/pick-organization',[OrganizationController::class, 'store']);
     Route::get('/want-candidate',[CandidateController::class, 'want'])->name('candidate.want');
     Route::post('/store-candidate',[CandidateController::class, 'store'])->name('candidate.store');
@@ -48,122 +63,42 @@ Route::middleware('auth')->group(function (){
     Route::get('/organization/{id}/candidate',[OrganizationController::class, 'candidate'])->name('organization.candidate');
     Route::get('/organization/{id}/give-role',[OrganizationController::class, 'giveRole'])->name('organization.give-role');
     Route::post('/organization/{id}/give-role',[OrganizationController::class, 'storeRole'])->name('organization.give-role');
+    Route::get('/organization/{id}/organizatoinProfile', [OrganizationController::class, 'profile'])->name('organization.profile');
+    Route::post('/organization/{id}/organizationChangeProfile', [OrganizationController::class, 'changeProfile'])->name('organization.changeProfile');
     Route::get('/organization/{id}/store-email',[AllowedMemberController::class, 'show'])->name('organization.store-email');
     Route::post('/organization/{id}/store-email',[AllowedMemberController::class, 'store'])->name('organization.store-email');
     Route::get('/organization/{id}/store-candidate',[CandidateController::class, 'show'])->name('organization.store-candidate');
     Route::post('/organization/{id}/store-candidate',[CandidateController::class, 'storeCandidate'])->name('organization.store-candidate');
     Route::post('/organization/{id}/store-vote',[CandidateController::class, 'storeVote'])->name('organization.store-vote');
-
     Route::get('/organization/{id}/create-session',[CandidateController::class, 'createSession'])->name('organization.create-session');
     Route::post('/organization/{id}/create-session',[CandidateController::class, 'storeSession'])->name('organization.create-session');
-    Route::get('/organization/{id}/show-session',[CandidateController::class, 'showSession'])->name('organization.show-session');
-    Route::get('/organization/{id}/delete-session',[CandidateController::class, 'deleteSession'])->name('organization.delete-session');
+    Route::get('/candidate/{candidate}',[CandidateController::class, 'detail'])->name('candidate.show');
+    Route::post('/organization/{id}/delete-session',[CandidateController::class, 'deleteSession'])->name('organization.delete-session');
     Route::get('/logout', function (Request $request) {
-        Auth::logout();
+    Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
         return redirect('/login');
     })->name('logout');
-
-    // Route::get('/logout', function (Request $request) {
-    //     Auth::logout();
-    //     $request->session()->invalidate();
-    //     $request->session()->regenerateToken();
-    //     return redirect('/login');
-    // })->name('logout');
-
-    //Route::get('/logout', [AuthController::class, 'logout'])->name('logout.get');
-
 });
 
-// Route::get('/login', function () {
-//     return view('auth.login');
-// })->name('login');
+Route::middleware('auth', 'isAdmin', 'securityHeader')->group(function (){
+    Route::get('/admin',[Admin::class, 'index']);
+    Route::get('/adminStoreEmail', [Admin::class, 'storeEmail'])->name('admin.storeEmail');
+    Route::post('/adminStoreEmail', [AllowedMemberController::class, 'store']);
+    Route::get('/viewOrganization', [Admin::class, 'viewOrganization'])->name('admin.viewOrganization');
+    Route::get('/viewUserRole/{id}', [Admin::class, 'viewUserRole'])->name('viewUserRole');
+    Route::post('/changeUserRole', [Admin::class, 'changeUserRole'])->name('changeUserRole');
+});
+Route::get('/login', function () {
+    return view('auth.login');
+})->name('login');
 
-// Route::get('/register', function () {
-//     return view('auth.register');
-// })->name('register');
-
-Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
-Route::post('/login', [AuthController::class, 'login'])->name('login.post');
-
-Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
-Route::post('/register', [AuthController::class, 'register'])->name('register.post');
-
-//Route::get('/forgot-password', [AuthController::class, 'showForgotPassword'])->name('forgot-password');
-Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
-
-Route::get('/home', function () {
-    return view('home');
-})->name('home');
-
-//Route::get('/forgot-password', function() {
-    //return view('auth.forgot-password');
-//})->name('forgot-password');
-
-Route::get('/change-password', function() {
-    return view('auth.change-password');
-})->name('change-password');
+Route::post('/logout', function (Request $request) {
+    Auth::logout();
+    $request->session()->invalidate();
+    $request->session()->regenerateToken();
+    return redirect('/login');
+})->name('logout');
 
 
-// Penambahan Route untuk reset password
-Route::get('/forgot-password', function () {
-    return view('auth.forgot-password');
-})->middleware('guest')->name('password.request');
-
-Route::post('/forgot-password', function (Request $request) {
-    $request->validate(['email' => 'required|email']);
-
-    $status = Password::sendResetLink(
-        $request->only('email')
-    );
-
-    return $status === Password::ResetLinkSent
-        ? back()->with(['status' => __($status)])
-        : back()->withErrors(['email' => __($status)]);
-})->middleware('guest')->name('password.email');
-
-// Reset
-Route::get('/reset-password/{token}', function (string $token) {
-    return view('auth.reset-password', ['token' => $token]);
-})->middleware('guest')->name('password.reset');
-
-Route::post('/reset-password', function (Request $request) {
-    $request->validate([
-        'token' => 'required',
-        'email' => 'required|email',
-        'password' => 'required|min:6|confirmed',
-    ]);
-
-    $status = Password::reset(
-        $request->only('email', 'password', 'password_confirmation', 'token'),
-        function (User $user, string $password) {
-            $user->forceFill([
-                'password' => Hash::make($password)
-            ])->setRememberToken(Str::random(60));
-
-            $user->save();
-
-            event(new PasswordReset($user));
-        }
-    );
-
-    if ($status === Password::PASSWORD_RESET) {
-        return back()->with('status', __($status));
-    }
-
-    return back()->withErrors(['email' => [__($status)]]);
-})->middleware('guest')->name('password.update');
-
-// sampai sini
-
-
-
-
-
-// Route::post('/logout', function (Request $request) {
-//     Auth::logout();
-//     $request->session()->invalidate();
-//     $request->session()->regenerateToken();
-//     return redirect('/login');
-// })->name('logout');

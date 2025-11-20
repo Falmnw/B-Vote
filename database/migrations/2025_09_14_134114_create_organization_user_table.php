@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('organization_users', function (Blueprint $table) {
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->foreignId('organization_id')->constrained()->onDelete('cascade');
-            $table->unsignedBigInteger('role_id')->default(3);
+            $table->unsignedBigInteger('role_id')->default(2);
             $table->foreign('role_id')->references('id')->on('roles')->onDelete('cascade');
             $table->primary(['user_id', 'organization_id']);
             $table->timestamps();

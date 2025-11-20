@@ -110,11 +110,9 @@ return [
     |
     */
 
-
-    // penambahan disini
     'from' => [
-        'address' => env('MAIL_FROM_ADDRESS', 'willygeming4@gmail.com'),
-        'name' => env('MAIL_FROM_NAME', 'Hello Laravel'),
+        'address' => env('MAIL_FROM_ADDRESS', 'hello@example.com'),
+        'name' => env('MAIL_FROM_NAME', 'Example'),
     ],
 
 ];

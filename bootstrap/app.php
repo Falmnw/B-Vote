@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Middleware\IsAdmin;
+use App\Http\Middleware\SecurityHeader;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -12,16 +14,11 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->alias([
-            'auth' => \App\Http\Middleware\AuthMiddleware::class,
+            'isAdmin' => isAdmin::class,
+            'securityHeader' =>SecurityHeader::class,
         ]);
     })
-
-    //Penambahan trust Host
-    ->withMiddleware(function (Middleware $middleware) {
-    $middleware->trustHosts(at: ['laravel.test']);
-})
-
     ->withExceptions(function (Exceptions $exceptions): void {
         //
     })->create();
-
+    
