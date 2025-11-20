@@ -62,8 +62,7 @@ class CandidateController extends Controller
             $candidate->poll_id = $session->id;
             $candidate->save();
         }
-
-        return back()->with('success', 'Voting berhasil dibuat.');
+        return redirect()->route('organization.show', ['id' => $id])->with('success', 'Voting berhasil dibuat');
     }
 
     public function deleteSession($id){

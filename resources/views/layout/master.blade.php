@@ -7,6 +7,7 @@
     <!-- <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}"> -->
     <link rel="stylesheet" href="{{ asset('assets/css/adminS.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/candidate.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/liatcandidate.css') }}">
     <link rel="icon" type="image/png" href="{{ asset('assets/images/logo-apk-simple.png') }}">
 
     <!-- Fonts & Bootstrap -->
@@ -21,7 +22,6 @@
             <div class="nav-center">
             </div>
             <a href="{{route('logout')}}" class="logout">Logout</a>
-            <a href="#" class="signup">Dashboard</a>
         </nav>
     </header>
     @yield('content')

@@ -13,7 +13,7 @@
             </div>
 
             <div class="card-content">
-                <h2 class="card-title">{{$organization->name}}</h2>
+                <h2 class="card-titles">{{$organization->name}}</h2>
                 <p class="card-text">{{$organization->deskripsi}}</p>
             </div>
         </div>

@@ -115,7 +115,7 @@
                         <select name="email" id="candidateEmailSelect"> 
                             <option value="">Pilih email...</option>
                             @foreach($organization->users as $user)
-                                <option value="{{ $user->id }}">{{ $user->email }}</option>
+                                <option value="{{ $user->email }}">{{ $user->email }}</option>
                             @endforeach
                         </select>
                         <label for="candidateFullName">Nama Lengkap</label>
@@ -134,29 +134,23 @@
                     </form>
                 </div>
 
-
-                <!-- PANEL: Create Session -->
                 <div class="admin-tab-panel" id="tab-create-session">
-                <h3>Create Session</h3>
-                <p>Buat sesi voting baru.</p>
+                    <h3>Create Session</h3>
+                    <p>Buat sesi voting baru.</p>
+                    <form class="admin-simple-form" id="sessionForm"action="{{ route('organization.create-session', $organization->id) }}"method="POST">
+                        @csrf
+                        <label for="sessionName">Judul Voting</label>
+                        <input type="text" id="sessionName" name="title" placeholder="Example: Pemilihan Ketua CSC 2025" required>
 
-                <form class="admin-simple-form">
-                    <label for="sessionName">Nama Sesi</label>
-                    <input
-                    type="text"
-                    id="sessionName"
-                    placeholder="misal: Pemilihan Ketua CSC 2025"
-                    >
+                         <label for="sessionStart">Waktu Mulai</label>
+                        <input id="sessionStart" type="datetime-local" name="start_time"  required>
 
-                    <label for="sessionStart">Tanggal Mulai</label>
-                    <input type="date" id="sessionStart">
+                        <label for="sessionEnd">Waktu Selesai</label>
+                        <input type="datetime-local" name="end_time" id="sessionEnd" required>   
 
-                    <label for="sessionEnd">Tanggal Selesai</label>
-                    <input type="date" id="sessionEnd">
-
-                    <button type="button" class="btn-primary">Buat Sesi</button>
-                </form>
-                </div>
+                        <button type="submit" class="btn-primary">Buat Voting</button>
+                    </form>
+                    </div>
 
                 </div>
             </section>
