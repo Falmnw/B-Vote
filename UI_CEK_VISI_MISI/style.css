@@ -1,0 +1,236 @@
+html, body {
+  margin: 0 0;
+  background: linear-gradient(149deg, #068fd7 18.66%, #fff 159.17%);
+}
+* {
+  font-family: 'Poppins', sans-serif;
+}
+
+
+
+/* Header + Navbar */
+header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+  margin-top: 20px;
+}
+
+nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; 
+  background-color: #014769;
+  padding: 10px 30px;
+  border-radius: 50px;
+  width: 80%;
+  margin: 0 auto;
+  gap: 10px;
+}
+
+.nav-center {
+  display: flex;
+  justify-content: center;
+  gap: 25px;
+  flex: 1; /* biar bagian tengah bisa menempati ruang di antara kiri dan kanan */
+  padding-left: 0px;
+}
+
+.nav-center a {
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 15px;
+  transition: color 0.3s;
+}
+
+.nav-center a:hover {
+  color: #f29722;
+}
+
+.login, .signup {
+  font-weight: 600;
+  transition: all 0.3s;
+}
+
+.login:hover, .signup:hover {
+  transform: scale(1.05);
+}
+
+
+nav > a {
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 15px;
+  margin-right: 20px;
+}
+
+#bvote_logo {
+  margin-right: auto;
+  margin-left: 20px;
+  margin-bottom: 10px;
+  height: 25px;
+  width: 75px;
+}
+
+.login {
+  color: white;
+  border: 2px solid #f29722;
+  padding: 5px 15px;
+  border-radius: 20px;
+}
+
+.signup {
+  color: black;
+  background-color: #f29722;
+  border: 2px solid #f29722;
+  padding: 5px 15px;
+  border-radius: 20px;
+}
+
+/* Banner Header */
+.headers {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #014769;
+    height: 100px;
+    padding: 0 40px;
+    margin-top: 101px;
+}
+
+.foto_candidate {
+    height: 150px;
+    width: 150px;
+    margin-right: 40px;
+}
+
+.nama_candidate {
+    font-size: 35px;
+    font-weight: bold;
+    background: linear-gradient(90deg, #F28C28, #F8D55A);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    padding-right: 55px;
+}
+
+.jabatan {
+    font-style: italic;
+    text-align: center;
+    font-size: 18px;
+    color: white;
+    margin-top: 30px;
+	margin-left: 55px;
+}
+
+/* Logo Organisasi */
+.logo_organisasi {
+    background-color: white;
+    border-radius: 50%;
+    height: 70px;
+    padding: 5px;
+
+}
+
+/* Card Section */
+.card {
+    background:#0474b8;
+    border-radius: 22px;
+    padding: 20px 32px;
+    margin-bottom: 25px;
+    width: 50%;
+    margin-left: 25%;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.18);
+    border: 3px solid #19a4ff;
+
+}
+
+
+#hehe {
+    color: #ffd28a;
+}
+
+.card-header {
+    display: flex;
+    align-items: center;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.icong {
+    width: 30px;
+    height: 30px;
+    border-radius: 6px;
+    margin-right: 10px;
+}
+
+.card-title {
+    background-color: #F8D55A;
+    border-radius: 25px;
+    padding: 4px 30px;
+    font-style: italic;
+}
+
+ul {
+    margin: 0;
+    padding-left: 18px;
+    line-height: 1.15;
+    color: #ffd28a;
+}
+
+/* 2 Column Layout */
+.row {
+    display: flex;
+}
+
+.col {
+    flex: 1;
+    margin-left: 50px;
+    padding: 10px 20px;
+}
+
+/* Footer */
+footer.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #014769; /* warna biru tua seperti contoh */
+  color: white;
+  padding: 10px 40px;
+  font-size: 14px;
+  font-family: "Poppins", sans-serif;
+  margin-top: 350px;
+
+}
+
+
+/* kiri */
+.footer-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+/* garis pemisah tengah */
+.footer-divider {
+  flex: 1;
+  height: 1px;
+  background-color: rgba(255, 255, 255, 0.4);
+  margin: 0 20px;
+}
+
+/* kanan */
+.footer-right {
+  display: flex;
+  gap: 20px;
+}
+
+.footer-right a {
+  color: white;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
