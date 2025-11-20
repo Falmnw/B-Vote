@@ -99,7 +99,6 @@ class CandidateController extends Controller
             'visi' => ['required', 'string'],
             'misi' => ['required', 'string'],
             'proker' => ['required', 'string'],
-            'background' => ['required', 'string'],
             'picture' => ['required', 'image', 'mimes:jpeg,png,jpg,gif', 'max:2048'],
         ]);
         $user = User::where('email', $validatedData['email'])->first();
@@ -121,7 +120,7 @@ class CandidateController extends Controller
             $candidate->visi = $validatedData['visi'];
             $candidate->misi = $validatedData['misi'];
             $candidate->proker = $validatedData['proker'];
-            $candidate->background = $validatedData['background'];
+
             $candidate->picture = $path; 
 
             $candidate->save();

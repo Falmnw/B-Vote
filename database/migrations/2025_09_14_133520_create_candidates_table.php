@@ -23,7 +23,6 @@ return new class extends Migration
             $table->text('visi');
             $table->text('misi');
             $table->text('proker');
-            $table->text('background');
             $table->unsignedInteger('total')->default(0);
             $table->timestamps();
 

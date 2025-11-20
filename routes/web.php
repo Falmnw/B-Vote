@@ -55,6 +55,8 @@ Route::middleware('auth','securityHeader')->group(function (){
     Route::get('/dashboard',[Dashboard::class, 'index']);
     Route::get('/other-organization',[Dashboard::class, 'other'])->name('otherOrganization');
 
+    Route::get('/admin-feature/{id}',[OrganizationController::class, 'adminFeature'])->name('admin-feature');
+
     Route::post('/pick-organization',[OrganizationController::class, 'store']);
     Route::get('/want-candidate',[CandidateController::class, 'want'])->name('candidate.want');
     Route::post('/store-candidate',[CandidateController::class, 'store'])->name('candidate.store');
@@ -63,7 +65,7 @@ Route::middleware('auth','securityHeader')->group(function (){
     Route::get('/organization/{id}/member',[OrganizationController::class, 'member'])->name('organization.member');
     Route::get('/organization/{id}/candidate',[OrganizationController::class, 'candidate'])->name('organization.candidate');
     Route::get('/organization/{id}/give-role',[OrganizationController::class, 'giveRole'])->name('organization.give-role');
-    Route::post('/organization/{id}/give-role',[OrganizationController::class, 'storeRole'])->name('organization.give-role');
+    Route::post('/organization/{id}/give-role',[OrganizationController::class, 'storeRole'])->name('organization.give-roles');
     Route::get('/organization/{id}/organizatoinProfile', [OrganizationController::class, 'profile'])->name('organization.profile');
     Route::post('/organization/{id}/organizationChangeProfile', [OrganizationController::class, 'changeProfile'])->name('organization.changeProfile');
     Route::get('/organization/{id}/store-email',[AllowedMemberController::class, 'show'])->name('organization.store-email');

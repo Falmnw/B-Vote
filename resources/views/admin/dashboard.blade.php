@@ -45,11 +45,11 @@
                 <form method="POST" action="{{ route('changeUserRole') }}" class="admin-simple-form" id="roleForm"> 
                     @csrf
                     {{-- Hidden organization ID (organisasi yang sedang aktif) --}}
-                    <input type="hidden" name="organization_id" value="{{ $organization->id }}">
                     <label for="orgSelect">Organisasi</label>
                     <select id="orgSelect" name="organization_id" required>
                         <option value="">-- Choose Organization --</option>
                         @foreach($organizations as $organization)
+                            
                             <option value="{{ $organization->id }}">{{ $organization->name }}</option>
                         @endforeach
                     </select>

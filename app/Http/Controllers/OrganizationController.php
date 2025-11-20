@@ -46,7 +46,18 @@ class OrganizationController extends Controller
         }
         return Organization::with($with)->findOrFail($id);
     }
-
+    public function adminFeature($id){
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+        $roles = Role::all();
+        $adminRoleId = Role::where('name', 'Admin')->value('id');
+        $exists = $user->organizations()->where('organization_id', $id)->where('role_id', $adminRoleId)->exists();
+        if (!$exists) {
+            abort(403, 'Unauthorized access');
+        }
+        $organization = Organization::findOrFail($id);
+        return view('organization.adminFeature', compact('organization', 'roles'));
+    }
     public function store(Request $request){
         $request->validate([
             'organization_id' => 'required|integer|exists:organizations,id',
@@ -98,8 +109,9 @@ class OrganizationController extends Controller
         if (!$exists) {
             abort(403, 'Unauthorized access');
         }
+        $roles = Role::all();
         $organization = Organization::findOrFail($id);
-        return view('organization.give-role', compact('organization'));
+        return view('organization.give-role', compact('organization', 'roles'));
     }
     public function storeRole(Request $request, $id)
     {

@@ -3,6 +3,7 @@
 @section('content')
 <p>{{$organization->deskripsi}}</p>
 <main>
+    <a href="{{route('admin-feature', $organization->id)}}">Admin</a>
     <section class="csc-section">
         <div class="csc-container">
             <div class="logo-circle">

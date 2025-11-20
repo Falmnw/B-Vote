@@ -11,8 +11,8 @@
         <input type="text" name="visi" placeholder="visi" required><br>
         <input type="text" name="misi" placeholder="misi" required><br>
         <input type="text" name="proker" placeholder="proker" required><br>
-        <input type="text" name="background" placeholder="background" required><br>
         <input type="file" name="picture" accept="image/*" placeholder="picture" required><br>
         <button type="submit">Add</button>
     </div>
 </form>
+
