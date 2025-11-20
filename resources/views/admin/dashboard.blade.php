@@ -5,4 +5,5 @@
 @if(Auth::user()->email === env('ADMIN_EMAIL'))
     <a href="{{ route('admin.storeEmail') }}">Masukkin Email ke Organisasi</a>
     <a href="{{ route('admin.viewOrganization') }}">Ubah Role User</a>
+    
 @endif

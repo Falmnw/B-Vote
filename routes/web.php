@@ -63,6 +63,8 @@ Route::middleware('auth','securityHeader')->group(function (){
     Route::get('/organization/{id}/candidate',[OrganizationController::class, 'candidate'])->name('organization.candidate');
     Route::get('/organization/{id}/give-role',[OrganizationController::class, 'giveRole'])->name('organization.give-role');
     Route::post('/organization/{id}/give-role',[OrganizationController::class, 'storeRole'])->name('organization.give-role');
+    Route::get('/organization/{id}/organizatoinProfile', [OrganizationController::class, 'profile'])->name('organization.profile');
+    Route::post('/organization/{id}/organizationChangeProfile', [OrganizationController::class, 'changeProfile'])->name('organization.changeProfile');
     Route::get('/organization/{id}/store-email',[AllowedMemberController::class, 'show'])->name('organization.store-email');
     Route::post('/organization/{id}/store-email',[AllowedMemberController::class, 'store'])->name('organization.store-email');
     Route::get('/organization/{id}/store-candidate',[CandidateController::class, 'show'])->name('organization.store-candidate');
@@ -70,10 +72,10 @@ Route::middleware('auth','securityHeader')->group(function (){
     Route::post('/organization/{id}/store-vote',[CandidateController::class, 'storeVote'])->name('organization.store-vote');
     Route::get('/organization/{id}/create-session',[CandidateController::class, 'createSession'])->name('organization.create-session');
     Route::post('/organization/{id}/create-session',[CandidateController::class, 'storeSession'])->name('organization.create-session');
-    Route::get('/organization/{id}/show-session',[CandidateController::class, 'showSession'])->name('organization.show-session');
-    Route::get('/organization/{id}/delete-session',[CandidateController::class, 'deleteSession'])->name('organization.delete-session');
+    Route::get('/candidate/{candidate}',[CandidateController::class, 'detail'])->name('candidate.show');
+    Route::post('/organization/{id}/delete-session',[CandidateController::class, 'deleteSession'])->name('organization.delete-session');
     Route::get('/logout', function (Request $request) {
-        Auth::logout();
+    Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
         return redirect('/login');

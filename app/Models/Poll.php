@@ -4,15 +4,19 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class buat_sesi extends Model
+class Poll extends Model
 {
     protected $fillable = [
         'organization_id',
+        'created_by',
         'title',
         'start_time',
-        'end_time'
+        'end_time',
     ];
-
+    protected $casts = [
+        'start_time' => 'datetime', // <-- Dipindahkan ke sini
+        'end_time' => 'datetime',   // <-- Dipindahkan ke sini
+    ];
     public function organization()
     {
         return $this->belongsTo(Organization::class);
@@ -23,9 +27,8 @@ class buat_sesi extends Model
         return $this->hasMany(Candidate::class);
     }
 
-    public function votes()
+    public function creator()
     {
-        return $this->hasMany(Vote::class);
+        return $this->belongsTo(User::class, 'created_by');
     }
-
 }

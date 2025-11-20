@@ -13,11 +13,17 @@ return new class extends Migration
     {
         Schema::create('votes', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->foreignId('organization_id')->constrained()->onDelete('cascade');
+
+            $table->unsignedBigInteger('poll_id');
+            $table->unsignedBigInteger('user_id'); // user yang melakukan vote
+
             $table->timestamps();
 
-            $table->unique(['user_id', 'organization_id']); // mencegah user vote lebih dari 1 kali di satu organisasi
+            $table->foreign('poll_id')->references('id')->on('polls')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+
+            // user hanya boleh vote sekali per session
+            $table->unique(['poll_id', 'user_id']);
         });
     }
 

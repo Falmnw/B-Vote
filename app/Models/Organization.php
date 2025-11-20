@@ -45,5 +45,8 @@ class Organization extends Model
     public function allowedMembers() {
         return $this->hasMany(AllowedMember::class);
     }
-
+    public function polls()
+    {
+        return $this->hasMany(Poll::class);
+    }
 }
