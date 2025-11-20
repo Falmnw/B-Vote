@@ -6,7 +6,7 @@
 <div class="headers">
     {{-- Foto Kandidat --}}
     <img src="{{ asset('storage/' . $candidate->picture) }}" 
-         class="foto_candidate" alt="Profile Photo" style="max-width: 200px; border-radius: 10px;">
+         class="foto_candidate" alt="Profile Photo">
 
     {{-- Nama Kandidat --}}
     <h1 class="nama_candidate">
