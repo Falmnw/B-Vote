@@ -83,7 +83,7 @@ Route::middleware('auth','securityHeader')->group(function (){
 });
 
 Route::middleware('auth', 'isAdmin', 'securityHeader')->group(function (){
-    Route::get('/admin',[Admin::class, 'index']); 
+    Route::get('/admin',[Admin::class, 'index']);
     Route::get('/adminStoreEmail', [Admin::class, 'storeEmail'])->name('admin.storeEmail');
     Route::post('/adminStoreEmail', [AllowedMemberController::class, 'store']);
     Route::get('/viewOrganization', [Admin::class, 'viewOrganization'])->name('admin.viewOrganization');
@@ -93,5 +93,12 @@ Route::middleware('auth', 'isAdmin', 'securityHeader')->group(function (){
 Route::get('/login', function () {
     return view('auth.login');
 })->name('login');
+
+Route::post('/logout', function (Request $request) {
+    Auth::logout();
+    $request->session()->invalidate();
+    $request->session()->regenerateToken();
+    return redirect('/login');
+})->name('logout');
 
 
