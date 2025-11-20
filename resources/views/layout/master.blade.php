@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'My App')</title>
-    <!-- <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}"> -->
+    <!-- <link rel="stylesheet" href="{{ asset('assets/css/adminOK.css') }}"> -->
     <link rel="stylesheet" href="{{ asset('assets/css/adminS.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/candidate.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/liatcandidate.css') }}">

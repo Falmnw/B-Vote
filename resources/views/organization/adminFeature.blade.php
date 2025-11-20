@@ -2,43 +2,40 @@
 
 @section('content')
     <main class="dashboard-main">
-        <!-- ADMIN PROFILE SECTION -->
+
         <section class="admin-profile">
             <div class="profile-card">
-                <!-- AVATAR BULAT (FOTO) -->
-
+                <div class="profile-avatar" id="profileAvatar">
+                    <img id="avatarImage" src="{{ asset('storage/' . $organization->logo) }}" alt="">
+                </div>
                 <div class="profile-info">
                     <div class="profile-name-row">
-                        <h2 id="profileName">Pilar Nalendra Sarwanto</h2>
+                        <h2 id="profileName">{{$organization->name}}</h2>
                         <button id="editProfileBtn" class="btn-edit">Edit Profile</button>
                     </div>
-
-                    <p id="profileTagline" class="profile-tagline">
-                        Tambahkan tagline singkat Anda di sini.
-                    </p>
+                    <p id="profileTagline" class="profile-tagline"> </p>
                 </div>
             </div>
 
-            <!-- form edit (muncul kalau klik Edit Profile / Edit Tagline) -->
-            <!-- PROFILE EDIT FORM -->
-            <form id="profileForm" class="profile-form hidden">
+            <form action="{{ route('organization.changeProfile', $organization->id)}}" method="POST" enctype="multipart/form-data" id="profileForm" class="profile-form hidden">
+            @csrf    
                 <div class="form-row">
                     <label for="avatarInput">Upload Foto Profil</label>
-                    <input type="file" id="avatarInput" accept="image/*">
+                    <input type="file" name="logo" id="avatarInput"  accept="image/*" required>
                 </div>
-
+                @error('logo')
+                    <div style="color: red;">{{ $message }}</div>
+                @enderror
                 <div class="form-row">
                     <label for="taglineInput">Tagline</label>
-                    <input type="text" id="taglineInput">
+                    <input type="text" id="taglineInput" name="deskripsi"required>
                 </div>
 
                 <div class="form-actions">
-                    <button type="button" id="saveProfileBtn" class="btn-primary">Simpan</button>
+                    <button type="submit" id="saveProfileBtn" class="btn-primary">Simpan</button>
                     <button type="button" id="cancelEditBtn" class="btn-secondary">Batal</button>
                 </div>
             </form>
-
-            
 
             <section class="admin-tabs-section">
                 <div class="admin-tabs">
@@ -109,8 +106,10 @@
                 <div class="admin-tab-panel" id="tab-choose-candidate">
                     <h3>Choose Candidate</h3>
                     <p>Pilih kandidat yang akan diikutsertakan dalam sesi voting.</p>
-                    <form action="{{ route('organization.store-candidate', $organization->id)}}" method="post" enctype="multipart/form-data" class="admin-simple-form">
+                    <form action="{{ route('organization.store-candidate', $organization->id)}}" method="post" enctype="multipart/form-data" class="admin-simple-form" id="candidateForm">
                         @csrf
+                        <label for="candidatePhoto">Foto Kandidat</label>
+                        <input type="file" id="candidatePhoto" name="picture" accept="image/*" placeholder="picture" required>
                         <label for="giveRoleEmail">Email User</label>
                         <select name="email" id="candidateEmailSelect"> 
                             <option value="">Pilih email...</option>
@@ -123,13 +122,11 @@
                         <label for="candidateDivision">Divisi</label>
                         <input type="text" name="divisi" id="candidateDivision" placeholder="divisi" required>
                         <label for="candidateVision">Visi</label>
-                        <input type="text" name="visi" id="candidateVision" placeholder="visi" required>
+                        <textarea class="large-text" type="text" name="visi" id="candidateVision" placeholder="visi" required></textarea>
                         <label for="candidateMission">Misi</label>
-                        <input type="text" name="misi" id="candidateMission"  placeholder="misi" required>
+                        <textarea class="large-text" type="text" name="misi" id="candidateMission"  placeholder="misi" required></textarea>
                         <label for="candidatePrograms">Program Kerja</label>
-                        <input type="text" name="proker" id="candidatePrograms" placeholder="proker" required>
-
-                        <input type="file" name="picture" accept="image/*" placeholder="picture" required>
+                        <textarea class="large-text" type="text" name="proker" id="candidatePrograms" placeholder="proker" required></textarea>
                         <button type="submit" class="btn-primary">Tambah Kandidat</button>
                     </form>
                 </div>
