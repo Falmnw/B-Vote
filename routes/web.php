@@ -52,7 +52,7 @@ Route::get('/auth/google/callback', function () {
 
 Route::middleware('auth','securityHeader')->group(function (){
     Route::get('/',[Dashboard::class, 'index']);
-    Route::get('/dashboard',[Dashboard::class, 'index']);
+    Route::get('/dashboard',[Dashboard::class, 'index'])->name('home');
     Route::get('/other-organization',[Dashboard::class, 'other'])->name('otherOrganization');
 
     Route::get('/admin-feature/{id}',[OrganizationController::class, 'adminFeature'])->name('admin-feature');
