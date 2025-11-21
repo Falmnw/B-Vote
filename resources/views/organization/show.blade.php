@@ -120,7 +120,7 @@
                 </div>
             </section>
             <p style="text-align:center; font-size:20px; font-weight:600;">
-                Pemenang: {{ $winner->user->name }}
+                Pemenang: {{ $winner->name }}
             </p>
 
         @else

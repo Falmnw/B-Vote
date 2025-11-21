@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="{{ asset('assets/css/adminS.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/candidate.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/liatcandidate.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/your-group.css') }}">
     <link rel="icon" type="image/png" href="{{ asset('assets/images/logo-apk-simple.png') }}">
     
     <!-- Fonts & Bootstrap -->

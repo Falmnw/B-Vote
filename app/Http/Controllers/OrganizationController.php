@@ -23,7 +23,7 @@ class OrganizationController extends Controller
         $user = Auth::user();
         $organization = $user->organizations()->where('organization_id', $id)->first();
         if (!$organization) {
-            abort(403, $id);
+            abort(403, 'asdasdasd');
         }
         if ($organization->pivot->role_id) {
             $roleName = $organization->pivot->role->name;
@@ -119,13 +119,11 @@ class OrganizationController extends Controller
         $user = Auth::user();
         $request->validate([
             'user_id' => 'required|integer|exists:users,id',
-            'organization_id' => 'required|integer|exists:organizations,id',
             'role_id' => 'required|integer|exists:roles,id',
         ]);
-        $this->getAdminAuthorizedOrganization($request->organization_id);
-        $organization = $this->getAuthorizedOrganization($request->organization_id);
+        $this->getAdminAuthorizedOrganization($id);
+        $organization = $this->getAuthorizedOrganization($id);
         $adminRoleId = Role::where('name', 'Admin')->value('id');
-        $candidateRoleId = Role::where('name', 'Candidate')->value('id');
 
         $user_id = $request->input('user_id');
         $organization_id = $request->input('organization_id');
@@ -134,18 +132,11 @@ class OrganizationController extends Controller
         if ($user->id == $user_id) {
             abort(403, 'You cannot change your own role.');
         }
-
         OrganizationUser::where('user_id', $user_id)
-                        ->where('organization_id', $organization_id)
+                        ->where('organization_id', $id)
                         ->update(['role_id' => $role_id]);
-        if ($request->role_id == $candidateRoleId) {
-            Candidate::firstOrCreate([
-                'user_id' => $request->user_id,
-                'organization_id' => $organization->id,
-            ], ['total' => 0]);
-        }
-
-        return view('organization.give-role', compact('organization'));
+        $roles = Role::all();
+        return view('organization.adminFeature', compact('organization', 'roles'));
     }
     public function profile($id){
         $organization = Organization::with('candidates')->findOrFail($id);

@@ -1,24 +1,50 @@
-<form action="/logout">
-    @csrf
-    <button type="submit">logout</button>
-</form>
-<p>Nama: {{$user->name}}</p>
-<p>Email: {{$user->email}}</p>
+@extends('layout.master')
+
+@section('content')
 @if(session('error'))
     <script>alert('{{session("error")}}')</script>
 @endif
 
-
-
 @foreach($user->organizations as $org)
-    <div style="align-items:center;display:flex;">
-        <a href="{{ route('organization.show', $org->id) }}">{{ $org->name }} </a><p>Role: {{ $org->pivot->role->name }}</p>
+    
+    <div class="group-header">
+        <h2>Your Organization</h2>
+    </div>
+    <div class="group">
+        <div class="left">
+            <div class="profile-avatar" id="profileAvatar">
+                @if($org->logo)
+                    <img id="avatarImage" src="{{ asset('storage/' . $org->logo) }}" alt="">
+                @endif
+            </div>
+        </div>
+
+        <div class="right">
+            <div class="group-name">
+                <h2><a href="{{route('organization.show', $org->id)}}" style="text-decoration: none;">{{$org->name}}</a></h2>
+            </div>
+
+            <div class="group-description">
+                <p>{{ $org->deskripsi}}</p>
+            </div>
+            @php
+                $poll = $org->polls->where('start_time', '<=', now())->where('end_time', '>=', now())->first();
+            @endphp
+            <div class="group-session">
+                @if($poll && now()->between($poll->start_time, $poll->end_time))
+                <h3><span style="color:red;">Voting session:</span> <span style="color:black;">{{$poll->start_time->format('d M Y H:i')}} - {{$poll->end_time->format('d M Y H:i')}}</span></h3>`
+                @else
+                    <h3><span style="color:red;">No voting session</span></h3>`
+                @endif
+                </div>
+        </div>
     </div>
 @endforeach
-
-
-<h3>=========================</h3>
-
-<a href="{{ route('otherOrganization')}}">Other Organization</a>
+<div class="bottom-bar">
+    <a href="{{ route('otherOrganization')}}" button class="bottom-button">
+        Check Other Groups!
+    </a>
+</div>
+@endsection
 
 
