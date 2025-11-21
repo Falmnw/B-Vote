@@ -72,22 +72,53 @@
                 </p>
             </div>
         </section>
-        @endif
-
         {{-- JUDUL KANDIDAT --}}
         <section class="kandidat-title">
             <div class="kandidat-section">
                 <h2>Cari Tahu Kandidat</h2>
             </div>
         </section>
-
+        @endif
 
         {{-- FORM VOTING --}}
         @if(now()->lessThan($sesi->start_time))
             <p style="text-align:center;">Voting akan dibuka pada {{ $sesi->start_time->format('d M Y H:i') }}</p>
         
         @elseif(now()->greaterThan($sesi->end_time))
-            <p style="text-align:center;">Voting sudah berakhir.</p>
+
+            <section class="countdown-section">
+                <div class="countdown-card">
+                    @if($organization->getRoleUser() == 'Admin' && $sesi)
+                        <form action="{{ route('organization.delete-session', $organization->id) }}" method="post">
+                            @csrf
+                            <button type="submit" >Delete</button>
+                        </form>
+                    @endif
+                    <div class="countdown-header">
+                        <span class="countdown-badge">Voting Berakhir</span>
+                        <p class="countdown-title">Sisa Waktu Pemilihan</p>
+                    </div>
+
+                    <div class="countdown-timer">
+                        <div class="time-box">
+                            <span class="time-value" id="cd-days">00</span>
+                            <span class="time-label">Hari</span>
+                        </div>
+                        <div class="time-box">
+                            <span class="time-value" id="cd-hours">00</span>
+                            <span class="time-label">Jam</span>
+                        </div>
+                        <div class="time-box">
+                            <span class="time-value" id="cd-minutes">00</span>
+                            <span class="time-label">Menit</span>
+                        </div>
+                        <div class="time-box">
+                            <span class="time-value" id="cd-seconds">00</span>
+                            <span class="time-label">Detik</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
             <p style="text-align:center; font-size:20px; font-weight:600;">
                 Pemenang: {{ $winner->user->name }}
             </p>
@@ -139,8 +170,6 @@
     @else
         <section class="countdown-section">
             <div class="countdown-card">
-
-                
                 <div class="countdown-header">
                     <span class="countdown-badge">Tidak Ada Pemilihan</span>
                     <p class="countdown-title">Sisa Waktu Pemilihan</p>

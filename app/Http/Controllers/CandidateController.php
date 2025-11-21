@@ -98,7 +98,7 @@ class CandidateController extends Controller
             'visi' => ['required', 'string'],
             'misi' => ['required', 'string'],
             'proker' => ['required', 'string'],
-            'picture' => ['required', 'image', 'mimes:jpeg,png,jpg,gif', 'max:2048'],
+            'picture' => ['required', 'image', 'mimes:jpeg,png,jpg', 'max:2048'],
         ]);
         $user = User::where('email', $validatedData['email'])->first();
         if(!$user){

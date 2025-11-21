@@ -109,7 +109,7 @@
                     <form action="{{ route('organization.store-candidate', $organization->id)}}" method="post" enctype="multipart/form-data" class="admin-simple-form" id="candidateForm">
                         @csrf
                         <label for="candidatePhoto">Foto Kandidat</label>
-                        <input type="file" id="candidatePhoto" name="picture" accept="image/*" placeholder="picture" required>
+                        <input type="file" id="candidatePhoto" name="picture" accept="image/jpg, image/jpeg, image/png" placeholder="picture" required>
                         <label for="giveRoleEmail">Email User</label>
                         <select name="email" id="candidateEmailSelect"> 
                             <option value="">Pilih email...</option>
