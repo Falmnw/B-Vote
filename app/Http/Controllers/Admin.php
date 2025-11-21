@@ -59,7 +59,8 @@ class Admin extends Controller
                 $validated['organization_id'],
                 ['role_id' => $validated['role_id']]
             );
-        } else {
+        } 
+        else {
             $user->organizations()->attach($validated['organization_id'], [
                 'role_id' => $validated['role_id']
             ]);

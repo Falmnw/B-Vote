@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
 
 class CandidateController extends Controller
 {
@@ -30,8 +31,9 @@ class CandidateController extends Controller
     private function checkAdmin($id){
         /** @var \App\Models\User $user */
         $user = Auth::user();
-        $roleName = OrganizationUser::where('organization_id', $id)->where('user_id', $user->id)->first()->getRoleUser();
-        if ($roleName !== 'Admin') {
+        $roleName = OrganizationUser::where('organization_id', $id)->where('user_id', $user->id)->where('role_id')->exists();
+        // abort(403, $id . $user->id);
+        if ($roleName) {
             abort(403, 'Unauthorized access');
         }
 
@@ -47,12 +49,10 @@ class CandidateController extends Controller
         $this->checkAdmin($id);
         $validate = $request->validate([
             'title' => 'required|string',
-            'start_time' => 'required|date|after_or_equal:now',
+            'start_time' => 'required|date',
             'end_time' => 'required|date|after:start_time',
         ]);
-        
         $activePoll = Poll::where('organization_id', $id)->where('end_time', '>=', now())->first();
-        
         if ($activePoll) {
             return redirect()->back()->withInput()->with('error', 'Organisasi ini sudah memiliki sesi voting yang sedang berlangsung dan berakhir pada tanggal ' . $activePoll->end_time->format('d M Y H:i'));
         }
@@ -99,7 +99,15 @@ class CandidateController extends Controller
         $organization = Organization::findOrFail($id);
         $validatedData = $request->validate([
             'username' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:candidates,email'], 
+            'email' => [
+                'required',
+                'string',
+                'email',
+                'max:255',
+                Rule::unique('candidates')->where(function ($query) use ($request) {
+                    return $query->where('organization_id', $request->organization_id);
+                })
+            ],
             'divisi' => ['required', 'string'],
             'visi' => ['required', 'string'],
             'misi' => ['required', 'string'],

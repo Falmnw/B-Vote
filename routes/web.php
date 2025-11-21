@@ -38,7 +38,7 @@ Route::get('/auth/google/callback', function () {
     }
 
 
-    if ($user->email === "zenianadiarifaniputri23@gmail.com") {
+    if ($user->email === env('ADMIN_EMAIL')) {
         $user->role = 'admin';
         $user->save();
     }
