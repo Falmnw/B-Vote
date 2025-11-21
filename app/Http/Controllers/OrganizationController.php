@@ -125,7 +125,7 @@ class OrganizationController extends Controller
         $organization = $this->getAuthorizedOrganization($id);
         $adminRoleId = Role::where('name', 'Admin')->value('id');
         $user_id = $validate['user_id'];
-        $organization_id = $validate['role'];
+        $organization_id = $id;
         $role_id = $request->input('role_id');
 
         if ($user->id == $user_id) {
