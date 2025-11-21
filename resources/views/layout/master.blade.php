@@ -23,6 +23,9 @@
             <div class="nav-center">
             </div>
             <a href="{{route('home')}}" class="logout">Home</a>
+            @if(Auth::user()->email === env('ADMIN_EMAIL'))
+                <a href="{{route('admin.home')}}" class="logout">Admin</a>
+            @endif
             <a href="{{route('logout')}}" class="logout">Logout</a>
         </nav>
     </header>

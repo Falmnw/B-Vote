@@ -47,7 +47,7 @@ class CandidateController extends Controller
         $this->checkAdmin($id);
         $validate = $request->validate([
             'title' => 'required|string',
-            'start_time' => 'required|date',
+            'start_time' => 'required|date|after_or_equal:now',
             'end_time' => 'required|date|after:start_time',
         ]);
         
@@ -76,7 +76,7 @@ class CandidateController extends Controller
         $poll = Poll::where('organization_id', $id)->firstOrFail();
         DB::transaction(function () use ($poll, $id) {
             Vote::where('poll_id', $poll->id)->delete();
-            Candidate::where('organization_id', $id)->update(['poll_id' => null, 'total' => 0]);
+            Candidate::where('organization_id', $id)->delete();
             $poll->delete();
         });
         return redirect()->route('organization.show', ['id' => $id])->with('success', 'Sesi voting dan data terkait berhasil dihapus.');

@@ -86,7 +86,7 @@ Route::middleware('auth','securityHeader')->group(function (){
 });
 
 Route::middleware('auth', 'isAdmin', 'securityHeader')->group(function (){
-    Route::get('/admin',[Admin::class, 'index']);
+    Route::get('/admin',[Admin::class, 'index'])->name('admin.home');
     Route::get('/adminStoreEmail', [Admin::class, 'storeEmail'])->name('admin.storeEmail');
     Route::post('/adminStoreEmail', [AllowedMemberController::class, 'store']);
     Route::get('/viewOrganization', [Admin::class, 'viewOrganization'])->name('admin.viewOrganization');
