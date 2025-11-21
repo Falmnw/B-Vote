@@ -11,7 +11,7 @@
     @enderror
 
     
-    <input type="text" name="deskripsi"required>
+    <input type="text" name="deskripsi">
 
 
     <button type="submit" style="margin-top: 10px;">Upload</button>
