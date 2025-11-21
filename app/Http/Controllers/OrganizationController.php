@@ -144,7 +144,6 @@ class OrganizationController extends Controller
 
     public function changeProfile(Request $request, $id)
     {
-        // Validasi aman
         $request->validate([
             'logo' => [
                 'required',
@@ -156,19 +155,18 @@ class OrganizationController extends Controller
             'deskripsi' => [
                 'nullable',
                 'string',
-                'max:2000' // batas aman
+                'max:2000'
             ],
         ]);
 
         $this->getAdminAuthorizedOrganization($id);
         $organization = $this->getAuthorizedOrganization($id);
-
-        // Cek polyglot / validitas gambar
+        if ($organization->logo) {
+            Storage::disk('public')->delete($organization->logo);
+        }
         if (! @getimagesize($request->file('logo')->getRealPath())) {
             return back()->withErrors(['logo' => 'File tidak valid sebagai gambar.']);
         }
-
-        // Baca file pakai Intervention v3
         $manager = new ImageManager(new Driver());
         $image = $manager->read($request->file('logo')->getRealPath());
 
@@ -184,7 +182,7 @@ class OrganizationController extends Controller
 
         // Simpan binary ke storage
         Storage::disk('public')->put('photos/' . $filename, $encoded);
-
+        
         // Update DB
         $organization->logo = 'photos/' . $filename;
         $organization->deskripsi = $request->deskripsi; 
