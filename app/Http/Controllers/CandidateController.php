@@ -21,10 +21,10 @@ class CandidateController extends Controller
         if (!$roleName) {
             abort(403, 'Unauthorized access');
         } 
-        if (!($roleName->role_id == 1 && $roleName->role_id == 3)) {
-            abort(403, 'Unauthorized access');
+        if ($roleName->role_id == 1 || $roleName->role_id == 3) {
+            return true;
         } 
-        return true;
+        abort(403, 'Bukan Aktivis');
     }
     private function checkAdmin($id){
         /** @var \App\Models\User $user */
