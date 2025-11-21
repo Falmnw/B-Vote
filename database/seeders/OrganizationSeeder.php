@@ -67,7 +67,6 @@ class OrganizationSeeder extends Seeder
         foreach($organizations as $name){
             Organization::create([
                 'name' => $name,
-                'member' => 0,
             ]);
         }
     }

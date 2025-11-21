@@ -4,12 +4,10 @@
 @if(session('error'))
     <script>alert('{{session("error")}}')</script>
 @endif
-
+<div class="group-header">
+    <h2>Your Organization</h2>
+</div>
 @foreach($user->organizations as $org)
-    
-    <div class="group-header">
-        <h2>Your Organization</h2>
-    </div>
     <div class="group">
         <div class="left">
             <div class="profile-avatar" id="profileAvatar">

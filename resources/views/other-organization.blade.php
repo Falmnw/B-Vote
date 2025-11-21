@@ -9,11 +9,11 @@
 @endif
 
 <?php $i = 1 ?>
+<div class="group-header">
+    <h2>Other Organization</h2>
+</div>
 @foreach($organizations as $org)
     @if(!$user->organizations->contains($org->id))
-        <div class="group-header">
-            <h2>Your Organization</h2>
-        </div>
         <div class="group">
             <div class="left">
                 <div class="profile-avatar" id="profileAvatar">

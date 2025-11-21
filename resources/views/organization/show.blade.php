@@ -41,7 +41,12 @@
         <section class="countdown-section">
             <div class="countdown-card">
 
-                
+                @if($organization->getRoleUser() == 'Admin' && $sesi)
+                    <form action="{{ route('organization.delete-session', $organization->id) }}" method="post">
+                        @csrf
+                        <button type="submit" >Delete</button>
+                    </form>
+                @endif
                 <div class="countdown-header">
                     <span class="countdown-badge">Sedang Berlangsung</span>
                     <p class="countdown-title">Sisa Waktu Pemilihan</p>
