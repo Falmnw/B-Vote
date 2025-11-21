@@ -10,6 +10,7 @@ use App\Models\User;
 use App\Models\Vote;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 class CandidateController extends Controller
@@ -32,7 +33,8 @@ class CandidateController extends Controller
         $roleName = OrganizationUser::where('organization_id', $id)->where('user_id', $user->id)->first()->getRoleUser();
         if ($roleName !== 'Admin') {
             abort(403, 'Unauthorized access');
-        } 
+        }
+
         return true;
     }
     public function createSession($id){
@@ -41,14 +43,14 @@ class CandidateController extends Controller
         return view('organization.create-session', compact('organization'));
     }
     
-    public function storeSession(Request $request, $id)
-    {
+    public function storeSession(Request $request, $id){
+        $this->checkAdmin($id);
         $validate = $request->validate([
             'title' => 'required|string',
             'start_time' => 'required|date',
             'end_time' => 'required|date|after:start_time',
         ]);
-
+        
         $activePoll = Poll::where('organization_id', $id)->where('end_time', '>=', now())->first();
         
         if ($activePoll) {
@@ -68,15 +70,16 @@ class CandidateController extends Controller
         return redirect()->route('organization.show', ['id' => $id])->with('success', 'Voting berhasil dibuat');
     }
 
-    public function deleteSession($id){
+    public function deleteSession($id)
+    {
         $this->checkAdmin($id);
-        $sesi =Poll::where('organization_id', $id)->first();
-        $candidate =Candidate::where('organization_id', $id);
-        $vote =Vote::where('poll_id', $sesi->id);
-        $sesi->delete();
-        $candidate->delete();
-        $vote->delete();
-         return redirect()->route('organization.show', ['id' => $id])->with('success', 'Delete Berhasil');
+        $poll = Poll::where('organization_id', $id)->firstOrFail();
+        DB::transaction(function () use ($poll, $id) {
+            Vote::where('poll_id', $poll->id)->delete();
+            Candidate::where('organization_id', $id)->update(['poll_id' => null, 'total' => 0]);
+            $poll->delete();
+        });
+        return redirect()->route('organization.show', ['id' => $id])->with('success', 'Sesi voting dan data terkait berhasil dihapus.');
     }
     public function showSession($id){
         $sesi = Poll::where('organization_id', $id)->first();
@@ -111,7 +114,6 @@ class CandidateController extends Controller
         if (!$organization->users()->where('id', $user->id)->exists()) {
             abort(403, 'User is not part of this organization.');
         }
-
         try {
             $candidate = new Candidate();
             $candidate->organization_id = $organization->id; 

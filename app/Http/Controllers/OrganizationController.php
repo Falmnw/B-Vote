@@ -117,16 +117,15 @@ class OrganizationController extends Controller
     {
         /** @var \App\Models\User $user */
         $user = Auth::user();
-        $request->validate([
+        $validate = $request->validate([
             'user_id' => 'required|integer|exists:users,id',
             'role_id' => 'required|integer|exists:roles,id',
         ]);
         $this->getAdminAuthorizedOrganization($id);
         $organization = $this->getAuthorizedOrganization($id);
         $adminRoleId = Role::where('name', 'Admin')->value('id');
-
-        $user_id = $request->input('user_id');
-        $organization_id = $request->input('organization_id');
+        $user_id = $validate['user_id'];
+        $organization_id = $validate['role'];
         $role_id = $request->input('role_id');
 
         if ($user->id == $user_id) {
