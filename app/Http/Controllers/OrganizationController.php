@@ -159,7 +159,7 @@ class OrganizationController extends Controller
             'logo' => [
                 'required',
                 'image',
-                'mimes:jpg,jpeg,png,webp',
+                'mimes:jpg,jpeg,png',
                 'max:2048',
                 'dimensions:min_width=50,min_height=50,max_width=4000,max_height=4000'
             ],

@@ -8,9 +8,9 @@
     <section class="csc-section">
         <div class="csc-container">
 
-            <div class="logo-circle">
+            <div class="profile-avatar" id="profileAvatar">
                 @if($organization->logo)
-                    <img src="{{ asset('storage/' . $organization->logo) }}" alt="">
+                    <img id="avatarImage" src="{{ asset('storage/' . $organization->logo) }}" alt="">
                 @endif
             </div>
 
@@ -33,14 +33,15 @@
 
         </div>
     </section>
-
     {{-- JIKA ADA SESI PEMILIHAN --}}
     @if($sesi)
-
+        
         {{-- COUNTDOWN (selama voting berlangsung) --}}
         @if(now()->between($sesi->start_time, $sesi->end_time))
         <section class="countdown-section">
             <div class="countdown-card">
+
+                
                 <div class="countdown-header">
                     <span class="countdown-badge">Sedang Berlangsung</span>
                     <p class="countdown-title">Sisa Waktu Pemilihan</p>
@@ -71,22 +72,53 @@
                 </p>
             </div>
         </section>
-        @endif
-
         {{-- JUDUL KANDIDAT --}}
         <section class="kandidat-title">
             <div class="kandidat-section">
                 <h2>Cari Tahu Kandidat</h2>
             </div>
         </section>
-
+        @endif
 
         {{-- FORM VOTING --}}
         @if(now()->lessThan($sesi->start_time))
             <p style="text-align:center;">Voting akan dibuka pada {{ $sesi->start_time->format('d M Y H:i') }}</p>
         
         @elseif(now()->greaterThan($sesi->end_time))
-            <p style="text-align:center;">Voting sudah berakhir.</p>
+
+            <section class="countdown-section">
+                <div class="countdown-card">
+                    @if($organization->getRoleUser() == 'Admin' && $sesi)
+                        <form action="{{ route('organization.delete-session', $organization->id) }}" method="post">
+                            @csrf
+                            <button type="submit" >Delete</button>
+                        </form>
+                    @endif
+                    <div class="countdown-header">
+                        <span class="countdown-badge">Voting Berakhir</span>
+                        <p class="countdown-title">Sisa Waktu Pemilihan</p>
+                    </div>
+
+                    <div class="countdown-timer">
+                        <div class="time-box">
+                            <span class="time-value" id="cd-days">00</span>
+                            <span class="time-label">Hari</span>
+                        </div>
+                        <div class="time-box">
+                            <span class="time-value" id="cd-hours">00</span>
+                            <span class="time-label">Jam</span>
+                        </div>
+                        <div class="time-box">
+                            <span class="time-value" id="cd-minutes">00</span>
+                            <span class="time-label">Menit</span>
+                        </div>
+                        <div class="time-box">
+                            <span class="time-value" id="cd-seconds">00</span>
+                            <span class="time-label">Detik</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
             <p style="text-align:center; font-size:20px; font-weight:600;">
                 Pemenang: {{ $winner->user->name }}
             </p>
@@ -101,8 +133,8 @@
                 <div class="candidate-card">
                     <div class="candidate-inner">
 
-                        <div class="candidate-photo">
-                            <img class="logo-circle" src="{{ asset('storage/' . $candidate->picture) }}" alt="">
+                        <div class="profile-avatar" id="profileAvatar">
+                            <img id="avatarImage" src="{{ asset('storage/' . $candidate->picture) }}" alt="">
                         </div>
 
                         <div class="candidate-info">
@@ -135,9 +167,34 @@
 
         </form>
         @endif
-
     @else
-        <p style="color:red; text-align:center;">Tidak ada sesi pemilihan.</p>
+        <section class="countdown-section">
+            <div class="countdown-card">
+                <div class="countdown-header">
+                    <span class="countdown-badge">Tidak Ada Pemilihan</span>
+                    <p class="countdown-title">Sisa Waktu Pemilihan</p>
+                </div>
+
+                <div class="countdown-timer">
+                    <div class="time-box">
+                        <span class="time-value" id="cd-days">00</span>
+                        <span class="time-label">Hari</span>
+                    </div>
+                    <div class="time-box">
+                        <span class="time-value" id="cd-hours">00</span>
+                        <span class="time-label">Jam</span>
+                    </div>
+                    <div class="time-box">
+                        <span class="time-value" id="cd-minutes">00</span>
+                        <span class="time-label">Menit</span>
+                    </div>
+                    <div class="time-box">
+                        <span class="time-value" id="cd-seconds">00</span>
+                        <span class="time-label">Detik</span>
+                    </div>
+                </div>
+            </div>
+        </section>
     @endif
 
 
@@ -149,5 +206,5 @@
     @endif
 
 </main>
-
+<script src="{{ asset('assets/js/countdown.js') }}"></script>
 @endsection

@@ -98,7 +98,7 @@ class CandidateController extends Controller
             'visi' => ['required', 'string'],
             'misi' => ['required', 'string'],
             'proker' => ['required', 'string'],
-            'picture' => ['required', 'image', 'mimes:jpeg,png,jpg,gif', 'max:2048'],
+            'picture' => ['required', 'image', 'mimes:jpeg,png,jpg', 'max:2048'],
         ]);
         $user = User::where('email', $validatedData['email'])->first();
         if(!$user){
@@ -139,7 +139,8 @@ class CandidateController extends Controller
     }
     public function detail($candidateId){
         $candidate = Candidate::where('id', $candidateId)->first();
-        return view('organization.show-candidate', compact('candidate'));
+        $organization = Organization::findorFail($candidate->organization_id);
+        return view('organization.show-candidate', compact('candidate', 'organization'));
     }
 
     public function storeVote(Request $request, $organizationId){

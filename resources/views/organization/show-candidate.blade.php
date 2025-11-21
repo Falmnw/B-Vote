@@ -5,8 +5,9 @@
 {{-- HEADER CANDIDATE --}}
 <div class="headers">
     {{-- Foto Kandidat --}}
-    <img src="{{ asset('storage/' . $candidate->picture) }}" 
-         class="foto_candidate" alt="Profile Photo" style="max-width: 200px; border-radius: 10px;">
+    <div class="profile-avatar" id="profileAvatar"> 
+        <img id="avatarImage" src="{{ asset('storage/' . $candidate->picture) }}"  alt="Profile Photo" style="max-width: 200px; border-radius: 10px;">
+    </div>
 
     {{-- Nama Kandidat --}}
     <h1 class="nama_candidate">
@@ -14,9 +15,10 @@
     </h1>
 
     {{-- Logo Organisasi --}}
-        <img src="{{ asset('assets/images/logo_csc.png') }}" class="logo_organisasi" style="max-width: 200px; border-radius: 100px;">
+    <div class="profile-avatar" id="profileAvatar"> 
+        <img src="{{ asset('storage/' . $organization->logo) }}" id="avatarImage">
+    </div>
 </div>
-
 {{-- DIVISI / JABATAN --}}
 <div class="jabatan">
     <h2>{{ $candidate->divisi }}</h2>
