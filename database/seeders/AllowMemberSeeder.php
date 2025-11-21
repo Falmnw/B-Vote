@@ -15,7 +15,7 @@ class AllowMemberSeeder extends Seeder
     {
         for($i = 1;$i < 41;$i++){
             AllowedMember::create([
-                'email' => 'irwanirwansyah783@gmail.com',
+                'email' => 'zenianadiarifaniputri23@gmail.com',
                 'organization_id' => $i,
             ]);
         }

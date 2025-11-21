@@ -38,7 +38,7 @@ Route::get('/auth/google/callback', function () {
     }
 
 
-    if ($user->email === 'irwanirwansyah783@gmail.com') {
+    if ($user->email === 'zenianadiarifaniputri23@gmail.com') {
         $user->role = 'admin';
         $user->save();
     }
@@ -54,9 +54,9 @@ Route::middleware('auth','securityHeader')->group(function (){
     Route::get('/',[Dashboard::class, 'index']);
     Route::get('/dashboard',[Dashboard::class, 'index']);
     Route::get('/other-organization',[Dashboard::class, 'other'])->name('otherOrganization');
-
+    
     Route::get('/admin-feature/{id}',[OrganizationController::class, 'adminFeature'])->name('admin-feature');
-
+    
     Route::post('/pick-organization',[OrganizationController::class, 'store']);
     Route::get('/want-candidate',[CandidateController::class, 'want'])->name('candidate.want');
     Route::post('/store-candidate',[CandidateController::class, 'store'])->name('candidate.store');
@@ -78,7 +78,7 @@ Route::middleware('auth','securityHeader')->group(function (){
     Route::get('/candidate/{candidate}',[CandidateController::class, 'detail'])->name('candidate.show');
     Route::post('/organization/{id}/delete-session',[CandidateController::class, 'deleteSession'])->name('organization.delete-session');
     Route::get('/logout', function (Request $request) {
-    Auth::logout();
+        Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
         return redirect('/login');

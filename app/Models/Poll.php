@@ -12,10 +12,12 @@ class Poll extends Model
         'title',
         'start_time',
         'end_time',
+        'is_announced'
     ];
     protected $casts = [
         'start_time' => 'datetime', // <-- Dipindahkan ke sini
-        'end_time' => 'datetime',   // <-- Dipindahkan ke sini
+        'end_time' => 'datetime', 
+        'is_announced' => 'boolean'  // <-- Dipindahkan ke sini
     ];
     public function organization()
     {

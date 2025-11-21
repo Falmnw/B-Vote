@@ -24,6 +24,8 @@ return new class extends Migration
             // Waktu mulai & berakhir
             $table->dateTime('start_time');
             $table->dateTime('end_time');
+            
+            $table->boolean('is_announced')->default('0');
 
             $table->timestamps();
         });
