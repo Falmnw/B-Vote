@@ -139,7 +139,8 @@ class CandidateController extends Controller
     }
     public function detail($candidateId){
         $candidate = Candidate::where('id', $candidateId)->first();
-        return view('organization.show-candidate', compact('candidate'));
+        $organization = Organization::findorFail($candidate->organization_id);
+        return view('organization.show-candidate', compact('candidate', 'organization'));
     }
 
     public function storeVote(Request $request, $organizationId){

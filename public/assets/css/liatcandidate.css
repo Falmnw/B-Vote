@@ -9,6 +9,7 @@
     height: 100px;
     padding: 0 40px;
     margin-top: 101px;
+    gap: 55px;
 }
 
 .foto_candidate {
@@ -24,7 +25,6 @@
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
-    padding-right: 55px;
 }
 
 .jabatan {
@@ -33,7 +33,6 @@
     font-size: 18px;
     color: white;
     margin-top: 30px;
-	margin-left: 55px;
 }
 
 /* Logo Organisasi */

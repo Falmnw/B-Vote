@@ -8,9 +8,9 @@
     <section class="csc-section">
         <div class="csc-container">
 
-            <div class="logo-circle">
+            <div class="profile-avatar" id="profileAvatar">
                 @if($organization->logo)
-                    <img src="{{ asset('storage/' . $organization->logo) }}" alt="">
+                    <img id="avatarImage" src="{{ asset('storage/' . $organization->logo) }}" alt="">
                 @endif
             </div>
 
@@ -33,14 +33,15 @@
 
         </div>
     </section>
-
     {{-- JIKA ADA SESI PEMILIHAN --}}
     @if($sesi)
-
+        
         {{-- COUNTDOWN (selama voting berlangsung) --}}
         @if(now()->between($sesi->start_time, $sesi->end_time))
         <section class="countdown-section">
             <div class="countdown-card">
+
+                
                 <div class="countdown-header">
                     <span class="countdown-badge">Sedang Berlangsung</span>
                     <p class="countdown-title">Sisa Waktu Pemilihan</p>
@@ -101,8 +102,8 @@
                 <div class="candidate-card">
                     <div class="candidate-inner">
 
-                        <div class="candidate-photo">
-                            <img class="logo-circle" src="{{ asset('storage/' . $candidate->picture) }}" alt="">
+                        <div class="profile-avatar" id="profileAvatar">
+                            <img id="avatarImage" src="{{ asset('storage/' . $candidate->picture) }}" alt="">
                         </div>
 
                         <div class="candidate-info">
@@ -135,9 +136,36 @@
 
         </form>
         @endif
-
     @else
-        <p style="color:red; text-align:center;">Tidak ada sesi pemilihan.</p>
+        <section class="countdown-section">
+            <div class="countdown-card">
+
+                
+                <div class="countdown-header">
+                    <span class="countdown-badge">Tidak Ada Pemilihan</span>
+                    <p class="countdown-title">Sisa Waktu Pemilihan</p>
+                </div>
+
+                <div class="countdown-timer">
+                    <div class="time-box">
+                        <span class="time-value" id="cd-days">00</span>
+                        <span class="time-label">Hari</span>
+                    </div>
+                    <div class="time-box">
+                        <span class="time-value" id="cd-hours">00</span>
+                        <span class="time-label">Jam</span>
+                    </div>
+                    <div class="time-box">
+                        <span class="time-value" id="cd-minutes">00</span>
+                        <span class="time-label">Menit</span>
+                    </div>
+                    <div class="time-box">
+                        <span class="time-value" id="cd-seconds">00</span>
+                        <span class="time-label">Detik</span>
+                    </div>
+                </div>
+            </div>
+        </section>
     @endif
 
 
@@ -149,5 +177,5 @@
     @endif
 
 </main>
-
+<script src="{{ asset('assets/js/countdown.js') }}"></script>
 @endsection
